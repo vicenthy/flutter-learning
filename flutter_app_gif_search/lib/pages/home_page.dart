@@ -17,7 +17,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<Map> _getGiphy() async {
     http.Response response;
-
     if (_search != "") {
       response = await http.get(
           "https://api.giphy.com/v1/gifs/search?api_key=Gb356Ht49gn7zA3aELTLxCA2o4DHmM9b&q=${_search}&limit=${_limit}&offset=${_offset}&rating=G&lang=pt");
@@ -52,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             child: TextField(
               cursorColor: Colors.white,
               decoration: InputDecoration(
-                labelText: "Pesquisa aqui",
+                labelText: "Pesquise aqui",
                 labelStyle: TextStyle(color: Colors.white),
                 border: _getDefaultBorder(),
                 enabled: true,
