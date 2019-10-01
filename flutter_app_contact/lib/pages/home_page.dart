@@ -5,6 +5,8 @@ import 'package:flutter_app_contact/helpers/contact_helper.dart';
 import 'package:flutter_app_contact/pages/contact_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+enum OrderOptions { ASC, DESC }
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -30,6 +32,21 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
+        actions: <Widget>[
+          PopupMenuButton<OrderOptions>(
+            itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+              const PopupMenuItem(
+                child: Text("Ordem crescente"),
+                value: OrderOptions.ASC,
+              ),
+              const PopupMenuItem(
+                child: Text("Ordem decrescente"),
+                value: OrderOptions.DESC,
+              ),
+            ],
+            onSelected: _orderItens,
+          )
+        ],
       ),
       body: _createListView(context),
       floatingActionButton: FloatingActionButton(
@@ -71,7 +88,8 @@ class _HomePageState extends State<HomePage> {
                     image: DecorationImage(
                         image: contactList[index].img != null
                             ? FileImage(File(contactList[index].img))
-                            : AssetImage("images/contact.png"))),
+                            : AssetImage("images/contact.png"),
+                        fit: BoxFit.cover)),
               ),
               Padding(
                 padding: EdgeInsets.all(10),
@@ -177,6 +195,21 @@ class _HomePageState extends State<HomePage> {
       }
     }
     await _getAllcontact();
+  }
+
+  _orderItens(OrderOptions result) {
+    setState(() {
+      switch (result) {
+        case OrderOptions.ASC:
+          return contactList.sort((a1, a2) =>
+              a1.nome.toLowerCase().compareTo(a2.nome.toLowerCase()));
+          break;
+        case OrderOptions.DESC:
+          return contactList.sort((a1, a2) =>
+              a2.nome.toLowerCase().compareTo(a1.nome.toLowerCase()));
+          break;
+      }
+    });
   }
 
   _getAllcontact() {
